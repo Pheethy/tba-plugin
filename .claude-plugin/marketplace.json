@@ -14,10 +14,7 @@
         "name": "Pheethy"
       },
       "category": "workflow",
-      "source": {
-        "source": "github",
-        "repo": "Pheethy/tba-plugin"
-      }
+      "source": "."
     }
   ]
 }
