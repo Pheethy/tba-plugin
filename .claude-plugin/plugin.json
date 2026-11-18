@@ -1,6 +1,6 @@
 {
   "name": "tba",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "ThaiBev Agents — Timeline Build Authority. SDLC plugin: Jira → design → implement → ship.",
   "author": {
     "name": "Pheethy",
@@ -20,9 +20,15 @@
     "./commands/tba-brief.md",
     "./commands/tba-pick.md",
     "./commands/tba-case.md",
+    "./commands/tba-scan.md",
+    "./commands/tba-docs.md",
     "./commands/tba-design.md",
     "./commands/tba-post.md",
-    "./commands/tba-subtask.md"
+    "./commands/tba-subtask.md",
+    "./commands/tba-branch.md",
+    "./commands/tba-implement.md",
+    "./commands/tba-e2e.md",
+    "./commands/tba-ship.md"
   ],
   "skills": [
     "./skills/tba"
