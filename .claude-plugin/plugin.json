@@ -20,6 +20,7 @@
     "./commands/tba-brief.md",
     "./commands/tba-pick.md",
     "./commands/tba-case.md",
+    "./commands/tba-design.md",
     "./commands/tba-post.md",
     "./commands/tba-subtask.md"
   ],
