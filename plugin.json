@@ -1,0 +1,36 @@
+{
+  "name": "tba",
+  "displayName": "ThaiBev Agents",
+  "version": "0.1.0",
+  "description": "Timeline Build Authority — SDLC plugin for Claude Code. Pick Jira cards, design, implement, ship.",
+  "author": "Pheethy",
+  "license": "MIT",
+  "repository": "https://github.com/Pheethy/tba-plugin",
+  "engines": {
+    "node": ">=20"
+  },
+  "skills": [
+    "skills/tba"
+  ],
+  "commands": [
+    "commands/tba-brief.md",
+    "commands/tba-pick.md",
+    "commands/tba-case.md",
+    "commands/tba-scan.md",
+    "commands/tba-design.md",
+    "commands/tba-post.md",
+    "commands/tba-subtask.md",
+    "commands/tba-docs.md"
+  ],
+  "theme": {
+    "name": "TVA Retro-Futurism",
+    "palette": {
+      "bg": "#1C1611",
+      "accent": "#D97E2F",
+      "gold": "#C9A961",
+      "cream": "#F4E4C1",
+      "alert": "#B93838"
+    },
+    "tagline": "For All Time. Always Deliver."
+  }
+}
