@@ -50,10 +50,13 @@ const STATE_BEAK = {
 function renderDuck({ eye, beak, color }) {
   const c = color || ANSI.fg.cream;
   const r = ANSI.fg.reset;
+  //          _
+  //    .__( · )<
+  //       \__)
   return [
-    `${c} _${r}`,
-    `${c}(${eye})${beak}${r}`,
-    `${c} \\_\\${r}`,
+    `${c}        _    ${r}`,
+    `${c}  .__( ${eye} )${beak} ${r}`,
+    `${c}       \\__)  ${r}`,
   ];
 }
 
