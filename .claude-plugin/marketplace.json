@@ -1,0 +1,23 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "tba-plugin",
+  "description": "ThaiBev Agents — Timeline Build Authority. SDLC plugin for Claude Code.",
+  "owner": {
+    "name": "Pheethy",
+    "url": "https://github.com/Pheethy"
+  },
+  "plugins": [
+    {
+      "name": "tba",
+      "description": "Timeline Build Authority — pick Jira cards, design features, post to Jira, create subtasks. Themed as Marvel's TVA.",
+      "author": {
+        "name": "Pheethy"
+      },
+      "category": "workflow",
+      "source": {
+        "source": "github",
+        "repo": "Pheethy/tba-plugin"
+      }
+    }
+  ]
+}

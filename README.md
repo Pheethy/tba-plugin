@@ -36,14 +36,20 @@ Claude Code plugin ช่วยทีม ThaiBev ทำ SDLC loop แบบค�
 
 ## Install
 
-```bash
-# 1. Clone to ~/.claude/plugins
-git clone https://github.com/Pheethy/tba-plugin.git ~/.claude/plugins/tba
+ใน Claude Code:
 
-# 2. First-time setup
-# ใน Claude Code
-/tba-brief
 ```
+/plugin marketplace add Pheethy/tba-plugin
+/plugin install tba@tba-plugin
+```
+
+แล้วรีสตาร์ท Claude Code → เรียกใช้:
+
+```
+/tba:brief
+```
+
+> หมายเหตุ: command prefix คือ `/tba:` (ไม่ใช่ `/tba-`) เพราะ Claude Code namespace commands ด้วย `<plugin>:<name>`
 
 Setup wizard จะถาม:
 - Jira email + API token (digital-and-technology.atlassian.net)
