@@ -1,6 +1,6 @@
 ---
 name: tba
-description: ThaiBev Agents (TBA) — SDLC workflow plugin themed as "Timeline Build Authority". Use when the user wants to pick a Jira card from RTRCDS, design a feature, post design to Jira, create subtasks, or work on hc-my-career services.
+description: ThaiBev Agents (TBA) — stateful SDLC orchestrator themed as "Timeline Build Authority". Use when the user wants to pick a Jira card from RTRCDS, design, implement, or ship a feature. Preferred entry: /tba:flow. Multi-case per repo via .tba/cases/.
 ---
 
 # TBA — Timeline Build Authority
@@ -76,10 +76,34 @@ Schema:
 ```
 <repo>/
 ├── .tba/                        # local, gitignored
+│   ├── active                   # text file: current case key
 │   ├── cache/                   # scan output (regeneratable)
-│   ├── meta.json
-│   └── trials/<KEY>/            # drafts (plan.md, qa.md)
+│   └── cases/
+│       └── <KEY>/
+│           ├── case.json        # state machine (phase, subtasks, gates)
+│           ├── plan.md          # design draft (from Architect)
+│           └── log.jsonl        # append-only phase/gate log
 ```
+
+## Orchestration model (v0.3)
+
+**Preferred entry:** `/tba:flow <KEY>` — runs full pipeline via subagents
+
+Subagents (invoked via Task tool):
+| Agent | Role | Voice |
+|---|---|---|
+| 🦆 case-officer | intake, triage, load context | friendly, quacky |
+| 🔮 architect | Pre-Build Trial (Q&A, plan) | formal, TVA judge |
+| ⚙️ field-agent | branch + implement + unit tests | terse, military |
+| 🔍 auditor | verify + e2e + regression check | paranoid, nitpicky |
+
+Phases: `intake → trial → post → subtask → build → ship → closed`
+
+Default gate policy (`/tba:flow` auto mode):
+- **Confirm required:** subtask-create, ship-subtask, ship-main
+- **Auto:** all other transitions
+
+User can `/tba:resume` or `/tba:cases` any time — state is CWD-scoped.
 
 ## Subtask naming (strict)
 
