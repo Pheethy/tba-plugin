@@ -8,7 +8,9 @@ description: TBA — Timeline Sweep. Scan current repo (or a given path) → .tb
 
 ## Args
 - `[path]` — absolute path; default = CWD
-- `--multi` — scan all child repos under given path (ใช้สำหรับ workspace folder)
+- `--multi` — scan all child repos under given path (ใช้สำหรับ workspace folder เช่น `my-career/`)
+
+> **Auto-detect:** ถ้า CWD ไม่ใช่ git repo แต่มี child repos (เช่นอยู่ที่ `my-career/` ซึ่งข้างในมี 7 microservices) → TBA switch เป็น `--multi` ให้อัตโนมัติ, ไม่ต้องใส่ flag เอง
 
 ## Steps
 

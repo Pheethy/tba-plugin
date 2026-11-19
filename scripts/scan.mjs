@@ -142,6 +142,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
 
   try {
     let repos;
+    let effectiveMulti = multi;
     if (multi) {
       repos = await findChildRepos(target);
       if (!repos.length) {
@@ -149,12 +150,21 @@ if (import.meta.url === `file://${process.argv[1]}`) {
         process.exit(1);
       }
     } else {
-      // single-repo mode
-      if (!(await _isRepoRoot(target))) {
-        scout?.stop({ final: `Not a git repo: ${target}`, ok: false });
-        process.exit(1);
+      const isRepo = await _isRepoRoot(target);
+      if (isRepo) {
+        repos = [target];
+      } else {
+        // auto-detect: not a repo? look for child repos (e.g. workspace folder)
+        const children = await findChildRepos(target);
+        if (children.length) {
+          scout?.say(`Not a git repo — found ${children.length} child repos, switching to project scan.`);
+          repos = children;
+          effectiveMulti = true;
+        } else {
+          scout?.stop({ final: `Not a git repo and no child repos found: ${target}`, ok: false });
+          process.exit(1);
+        }
       }
-      repos = [target];
     }
 
     scout?.say(`Dispatching agent to ${repos.length} ${repos.length === 1 ? 'repo' : 'repos'}.`);
@@ -166,7 +176,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     }
 
     const payload = {
-      scope: multi ? 'project' : 'repo',
+      scope: effectiveMulti ? 'project' : 'repo',
       scannedAt: new Date().toISOString(),
       repos: results.map((r) => ({
         repository: r.repository,
@@ -183,7 +193,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
       process.exit(0);
     }
 
-    const cacheDir = join(multi ? target : repos[0], '.tba', 'cache');
+    const cacheDir = join(effectiveMulti ? target : repos[0], '.tba', 'cache');
     await writeCache(cacheDir, payload);
 
     await scout.stop({
