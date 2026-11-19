@@ -72,27 +72,37 @@ export class JiraClient {
   }
 
   // Return issues assigned to current user in project, unresolved first
-  async pickAssigned({ limit = 20 } = {}) {
+  // Scope: current (open) sprint only, include DONE so Agent can review
+  // completed work (QA follow-up, revisit merged subtasks, etc.)
+  async pickAssigned({ limit = 50 } = {}) {
     const jql =
       `project = ${this.project} AND assignee = currentUser() ` +
-      `AND statusCategory != Done ORDER BY updated DESC`;
+      `AND sprint in openSprints() ORDER BY status ASC, updated DESC`;
     const data = await this._fetch('/search/jql', {
       method: 'POST',
       body: {
         jql,
-        fields: ['summary', 'status', 'issuetype', 'priority', 'updated', 'parent'],
+        fields: ['summary', 'status', 'issuetype', 'priority', 'updated', 'parent', 'customfield_10020'],
         maxResults: limit,
       },
     });
-    return (data.issues || []).map((i) => ({
-      key: i.key,
-      summary: i.fields.summary,
-      status: i.fields.status?.name,
-      type: i.fields.issuetype?.name,
-      priority: i.fields.priority?.name,
-      updated: i.fields.updated,
-      parent: i.fields.parent?.key,
-    }));
+    return (data.issues || []).map((i) => {
+      const sprintField = i.fields.customfield_10020 || [];
+      const active = Array.isArray(sprintField)
+        ? sprintField.find((s) => s.state === 'active') || sprintField[sprintField.length - 1]
+        : null;
+      return {
+        key: i.key,
+        summary: i.fields.summary,
+        status: i.fields.status?.name,
+        statusCategory: i.fields.status?.statusCategory?.key,
+        type: i.fields.issuetype?.name,
+        priority: i.fields.priority?.name,
+        updated: i.fields.updated,
+        parent: i.fields.parent?.key,
+        sprint: active?.name || null,
+      };
+    });
   }
 
   async getIssue(key) {
@@ -264,11 +274,13 @@ if (import.meta.url === `file://${process.argv[1]}`) {
         break;
       }
       case 'pick': {
-        const list = await jira.pickAssigned({ limit: 30 });
+        const list = await jira.pickAssigned({ limit: 50 });
         if (!list.length) {
-          console.log('No open cards assigned.');
+          console.log('No cards assigned in the current sprint.');
           break;
         }
+        const sprint = list.find((i) => i.sprint)?.sprint || '(no sprint)';
+        console.log(`Sprint: ${sprint}  (${list.length} cards)`);
         for (const i of list) {
           console.log(`  ${i.key.padEnd(14)} ${(i.status || '').padEnd(14)} ${i.summary}`);
         }
